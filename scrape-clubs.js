@@ -3,6 +3,9 @@ const fs = require('fs');
 
 const USERNAME = process.env.DIRT_USERNAME;
 const PASSWORD = process.env.DIRT_PASSWORD;
+
+const STARTING_PAGE = 1;
+
 const USERNAME_SELECTOR = '#Email';
 const PASSWORD_SELECTOR = '#Password';
 const LOGIN_BUTTON_SELECTOR = '#login_button_container > input';
@@ -51,7 +54,8 @@ const extractPageResults = async (page) => {
 };
 
 (async () => {
-  const browser = await puppeteer.launch({ headless: false, devtools: true });
+  // const browser = await puppeteer.launch({ headless: false, devtools: true });
+  const browser = await puppeteer.launch({ headless: false });
   const page = await browser.newPage();
   page.on('console', msg => console.log('PAGE LOG:', msg.text()));
   await page.goto('https://accounts.codemasters.com/');
@@ -65,7 +69,7 @@ const extractPageResults = async (page) => {
 
   await page.click(LOGIN_BUTTON_SELECTOR);
 
-  let currentPageNumber = 1;
+  let currentPageNumber = STARTING_PAGE;
   await page.goto(`https://dirtrally2.com/clubs/find-club/page/${currentPageNumber}`);
 
   let hasNext = true;

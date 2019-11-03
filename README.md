@@ -1,15 +1,15 @@
-# Dirt 2 Clubs
-scrapes the dirt 2 clubs website and creates a csv from the data.
+# Dirt Rally 2.0 Clubs
+Scrapes the dirt rally 2.0 clubs website and creates a csv from the data.
 
 Allows us to search and filter the clubs, which the current web interface is lacking :)
 
 I'll be hosting a Google spreadsheet with this data updated regularly,
-so there shouldn't be any need for others to run this code individually.
+so there shouldn't be any need for others to run this code individually. No need to create extra load on the website!
 
-## prereqs
+## Prereqs
 
 * Node 8+
-* A codemasters account that can access the dirt 2 club pages (https://dirtrally2.com/clubs)
+* A codemasters account that can access the dirt rally 2.0 club pages (https://dirtrally2.com/clubs)
 
 ## Setup
 
@@ -19,13 +19,10 @@ so there shouldn't be any need for others to run this code individually.
 
 To scrape the clubs into JSON:
 * set DIRT_USERNAME and DIRT_PASSWORD env vars
-* then run
-
-    
-    node ./scrape-clubs.json
+* run `node ./scrape-clubs.js`
     
 To create a csv from the JSON:
 
-    node ./write-csv.json
+    node ./write-csv.js
     
  

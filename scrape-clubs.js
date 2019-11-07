@@ -1,5 +1,6 @@
 const puppeteer = require('puppeteer');
 const fs = require('fs');
+const { updateSheet } = require('./update-sheet');
 
 const USERNAME = process.env.DIRT_USERNAME;
 const PASSWORD = process.env.DIRT_PASSWORD;
@@ -58,6 +59,7 @@ const extractPageResults = async (page) => {
   const browser = await puppeteer.launch({ headless: false });
   const page = await browser.newPage();
   page.on('console', msg => console.log('PAGE LOG:', msg.text()));
+
   await page.goto('https://accounts.codemasters.com/');
   await page.waitForNavigation();
 
@@ -80,14 +82,11 @@ const extractPageResults = async (page) => {
     hasNext = results.hasNext;
     let fileJson = { data: [] };
 
-    if (fs.existsSync("./results.json")) {
+    if (currentPageNumber !== 1 && fs.existsSync("./results.json")) {
       const file = fs.readFileSync("./results.json", "utf-8");
       fileJson = JSON.parse(file);
     }
     fileJson.currentPageNumber = currentPageNumber;
-    if (!fileJson.data) {
-      fileJson.data = [];
-    }
     fileJson.data.push(...data);
     fs.writeFileSync("./results.json", JSON.stringify(fileJson, null, 2));
     console.log(`wrote page ${currentPageNumber}`);
@@ -98,4 +97,5 @@ const extractPageResults = async (page) => {
   }
 
   await browser.close();
+  await updateSheet();
 })();

@@ -7,6 +7,7 @@ const sheetId = "1M-JZAPJMp0ASihKi7z2kHMiL9BFi7PQlakvvl7pcal0";
 const updateSheet = async () => {
   const clientId = process.env.DIRT_SHEETS_CLIENT_ID;
   const clientSecret = process.env.DIRT_SHEETS_CLIENT_SECRET;
+  const refreshToken = process.env.DIRT_SHEETS_REFRESH_TOKEN;
 
   const oauth2Client = new google.auth.OAuth2(
     clientId,
@@ -14,8 +15,10 @@ const updateSheet = async () => {
     "http://localhost"
   );
 
-  const token = fs.readFileSync("./token.json", "utf-8");
-  oauth2Client.setCredentials(JSON.parse(token).tokens);
+  const tokens = {
+    "refresh_token": refreshToken
+  };
+  oauth2Client.setCredentials(tokens);
 
   const sheets = google.sheets({
     version: 'v4',
@@ -37,8 +40,8 @@ const updateSheet = async () => {
     resource: { values },
     range: "A1",
     valueInputOption: "USER_ENTERED"
-  })
+  });
+  console.log(`sheet updated with ${values.length} rows`);
 };
 
-// updateSheet().then(() => console.log("success"));
 module.exports = { updateSheet };
